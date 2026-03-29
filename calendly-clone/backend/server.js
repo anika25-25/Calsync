@@ -18,11 +18,17 @@ const app = express();
 
 // ✅ CORS (must be before routes)
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://calsync-wn55.vercel.app'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: function(origin, callback) {
+    if (!origin || 
+        origin.includes('calsync-wn55.vercel.app') || 
+        origin.includes('vercel.app') ||
+        origin === 'http://localhost:5173') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
 }));
 
