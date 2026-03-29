@@ -17,7 +17,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 const app = express();
 
 // ✅ CORS (must be before routes)
-app.use(cors({
+const corsOptions = {
   origin: function(origin, callback) {
     if (!origin || 
         origin.includes('calsync-wn55.vercel.app') || 
@@ -30,9 +30,10 @@ app.use(cors({
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
-}));
+};
 
-app.options('*', cors());
+app.options('*', cors(corsOptions)); // ✅ preflight FIRST, with same config
+app.use(cors(corsOptions));          // ✅ then apply to all routes
 
 // ✅ Body parser
 app.use(express.json());
@@ -41,27 +42,3 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/event-types', eventTypesRouter);
 app.use('/api/availability', availabilityRouter);
-app.use('/api/bookings', bookingsRouter);
-app.use('/api/meetings', meetingsRouter);
-
-// ✅ Test route
-app.get('/', (req, res) => {
-  res.send('Backend is running 🚀');
-});
-
-// ✅ Error handler (ALWAYS LAST)
-app.use(errorHandler);
-
-// ✅ Server start
-const PORT = process.env.PORT || 5000;
-
-sequelize.sync({ force: false })
-  .then(() => {
-    console.log('DB synced successfully');
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('DB sync failed:', err);
-  });
