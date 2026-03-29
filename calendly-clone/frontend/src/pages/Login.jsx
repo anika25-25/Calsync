@@ -9,7 +9,9 @@ export default function Login() {
   const handleLogin = async () => {
     if (!name.trim()) return;
     setLoading(true);
+    alert("API URL: " + import.meta.env.VITE_API_URL); // temporary debug
     try {
+      console.log("API URL:", import.meta.env.VITE_API_URL);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
