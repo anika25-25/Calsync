@@ -19,7 +19,7 @@ export default function Login() {
       console.log("LOGIN RESPONSE:", data);
       localStorage.setItem('name', data.name || name);
       localStorage.setItem('userId', data.id);
-      navigate('/dashboard');
+      window.location.href = '/dashboard';
     } catch (err) {
       console.error(err);
       alert("Login failed");
