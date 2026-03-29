@@ -4,23 +4,19 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./src/config/db');
 
-// Routes
 const eventTypesRouter = require('./src/routes/eventTypes');
 const availabilityRouter = require('./src/routes/availability');
 const bookingsRouter = require('./src/routes/bookings');
 const meetingsRouter = require('./src/routes/meetings');
 const userRoutes = require('./src/routes/users');
 
-// Middleware
 const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
 
-// ✅ CORS (must be before routes)
 const corsOptions = {
   origin: function(origin, callback) {
     if (!origin || 
-        origin.includes('calsync-wn55.vercel.app') || 
         origin.includes('vercel.app') ||
         origin === 'http://localhost:5173') {
       callback(null, true);
@@ -32,13 +28,32 @@ const corsOptions = {
   credentials: true
 };
 
-app.options('*', cors(corsOptions)); // ✅ preflight FIRST, with same config
-app.use(cors(corsOptions));          // ✅ then apply to all routes
+app.options('*', cors(corsOptions));
+app.use(cors(corsOptions));
 
-// ✅ Body parser
 app.use(express.json());
 
-// ✅ Routes (clean order)
 app.use('/api/users', userRoutes);
 app.use('/api/event-types', eventTypesRouter);
 app.use('/api/availability', availabilityRouter);
+app.use('/api/bookings', bookingsRouter);
+app.use('/api/meetings', meetingsRouter);
+
+app.get('/', (req, res) => {
+  res.send('Backend is running 🚀');
+});
+
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 5000;
+
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('DB synced successfully');
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('DB sync failed:', err);
+  });
