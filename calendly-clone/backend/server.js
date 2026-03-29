@@ -18,7 +18,10 @@ const app = express();
 
 // ✅ CORS (must be before routes)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: [
+    'http://localhost:5173',
+    'https://calsync-wn55.vercel.app'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
