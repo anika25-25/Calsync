@@ -136,14 +136,14 @@ if (conflict) {
   });
 }
 
-    const booking = await Booking.create({
-      eventTypeId: et.id,
-      inviteeName,
-      inviteeEmail,
-      startTime: start,
-      endTime: end
-    });
-
+   const booking = await Booking.create({
+  eventTypeId: et.id,
+  hostId: et.userId,  // ✅ add this line
+  inviteeName,
+  inviteeEmail,
+  startTime: start,
+  endTime: end
+});
     res.json(booking);
   } catch (err) {
     next(err);
