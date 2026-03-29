@@ -39,7 +39,29 @@ export default function Meetings() {
     const s = map[status?.toLowerCase()] || map.confirmed;
     return <span className={`badge ${s.cls}`}>{s.label}</span>;
   };
+const handleExport = () => {
+  const data = meetings.map(m => ({
+    Event: m.EventType?.name || 'Meeting',
+    Date: format(new Date(m.startTime), 'EEEE, MMMM d, yyyy'),
+    Time: format(new Date(m.startTime), 'h:mm a'),
+    Invitee: m.inviteeName,
+    Email: m.inviteeEmail,
+    Status: tab === 'past' ? (m.status || 'completed') : 'confirmed',
+  }));
 
+  const csv = [
+    Object.keys(data[0]).join(','),
+    ...data.map(row => Object.values(row).map(v => `"${v}"`).join(','))
+  ].join('\n');
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `meetings-${tab}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+};
   return (
     <div style={{ fontFamily: 'var(--font-body)' }}>
       {/* Topbar */}
