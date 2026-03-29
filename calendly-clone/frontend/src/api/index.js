@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: 'http://localhost:5001/api' });
+const api = axios.create({ baseURL: 'https://calsync-backend-fqcu.onrender.com' });
 
 export const getEventTypes = () => api.get('/event-types');
 export const createEventType = (data) => api.post('/event-types', data);
