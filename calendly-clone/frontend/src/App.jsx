@@ -13,7 +13,8 @@ import Login from './pages/Login';
 import './index.css';
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  // ✅ Read directly — no useEffect race condition
+  const [user, setUser] = useState(() => localStorage.getItem('name'));
 
   // ✅ FIX: reactively read localStorage
   useEffect(() => {
