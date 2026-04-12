@@ -1,6 +1,6 @@
 ## 🌐 Live Demo
-- Frontend: https://your-vercel-link.vercel.app
-- Backend: https://your-render-link.onrender.com
+- Frontend: https://calsync-wn55.vercel.app/
+- Backend: https://calsync-backend-fqcu.onrender.com/
 
 # Calendly Clone
 
